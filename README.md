@@ -1,4 +1,4 @@
-## ![Screenshot 1](/public/Screen%20Shot%202023-11-10%20at%2014.32.11.png)
+## ![Screenshot 1](./set-team-frontend/public/Screen%20Shot%202023-11-10%20at%2014.32.11.png)
 
 ---
 
@@ -44,10 +44,10 @@ Backend
 
 **Screenshots**
 
-![Screenshot 2](/public/Screen%20Shot%202023-11-09%20at%2013.21.09.png)
-![Screenshot 3](/public/Screen%20Shot%202023-11-09%20at%2013.30.32.png)
-![Screenshot 4](/public/Screen%20Shot%202023-11-09%20at%2013.31.25.png)
-![Screenshot 5](/public/Screen%20Shot%202023-11-09%20at%2013.32.00.png)
-![Screenshot 6](/public/Screen%20Shot%202023-11-09%20at%2013.32.30.png) 
-![Screenshot 7](/public/Screen%20Shot%202023-11-09%20at%2013.35.34.png)
-![Screenshot 7](/public/Screen%20Shot%202023-11-09%20at%2013.32.16.png)
+![Screenshot 2](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.21.09.png)
+![Screenshot 3](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.30.32.png)
+![Screenshot 4](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.31.25.png)
+![Screenshot 5](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.32.00.png)
+![Screenshot 6](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.32.30.png) 
+![Screenshot 7](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.35.34.png)
+![Screenshot 7](./set-team-frontend/Screen%20Shot%202023-11-09%20at%2013.32.16.png)
