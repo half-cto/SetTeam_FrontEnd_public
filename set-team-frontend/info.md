@@ -1,0 +1,9 @@
+"@aws-amplify/auth": "^5.5.3",
+    "@aws-sdk/client-cognito-identity": "^3.363.0",
+    "@aws-sdk/client-s3": "^3.367.0",
+    "@aws-sdk/credential-providers": "^3.363.0",
+    "@aws-sdk/types": "^3.357.0",
+    "aws-amplify": "^5.3.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.1"
