@@ -1,5 +1,5 @@
 import { getCredentialsFromLocalStorage } from '../../../utils/functions';
-import UserDetailsForm from '../../main-app/userInfo/UserDetailsForm';
+import UserDetailsForm from '../../main-app/user-info/UserDetailsForm';
 
 const MUserInfo = () => {
     const { userName } = getCredentialsFromLocalStorage();

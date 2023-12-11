@@ -20,7 +20,6 @@ interface ProjTableProps {
     project: Project;
 }
 
-
 export interface RowData extends Record<string, any> {
     key: string;
     date: string;
@@ -34,26 +33,86 @@ export interface CellChangeProps {
     status: string | undefined;
 }
 
-// TODO refactor this component
-
 const ProjTable = ({ project }: ProjTableProps) => {
+    //  RTK data fetching
     const { data: allSparks } = useFetchTeamMembersQuery(undefined);
     const { data: projDates, refetch: refetchDates } = useFetchDatesQuery(
         project.projDates
     );
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+    //  RTK hooks
     const [removeDatesFromProject] = useRemoveDatesFromProjectMutation();
     const [updateDate] = useUpdatedDateMutation();
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [deleteProject] = useDeleteProjectMutation();
+
+    //  imported components/hooks
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
     const [modal, modalContextHolder] = Modal.useModal();
 
-    const handleCellChange = async ({
+    // preare meta data and data for table render
+    let columns: TableColumn[] = [];
+
+    if (allSparks) {
+        columns = renderColumns(project.projTeam, allSparks, project.SK);
+    }
+
+    let rowData: RowData[] = [];
+
+    if (projDates) {
+        rowData = renderRows(projDates, columns, handleCellChange);
+    }
+
+    // eventHandlers
+    async function handleRemoveDates() {
+        // prevent deleting all projDates
+        if (projDates?.length === selectedRowKeys.length) {
+            await messageApi.open({
+                type: 'error',
+                content: 'Project has to have at least one date!',
+            });
+            return;
+        }
+
+        if (projDates && selectedRowKeys.length > 0) {
+            let datesToUpdate: ProjDate[] = projDates.filter((date) =>
+                selectedRowKeys.includes(date.SK)
+            );
+
+            // prepare DATES for update
+            datesToUpdate = datesToUpdate.map((date) =>
+                removeProjectFromDate(project.SK, date)
+            );
+
+            //prepare project.projDates for update
+            const newProjDates = project.projDates.filter(
+                (date) => !selectedRowKeys.includes(date)
+            );
+
+            let refetchFlag = false;
+            await removeDatesFromProject({
+                projId: project.SK,
+                projDates: newProjDates,
+                datesToUpdate: datesToUpdate,
+            })
+                .unwrap()
+                .catch(() => (refetchFlag = true));
+
+            // if transaction fails refetch dates to get new sessionId for next attempt
+            if (refetchFlag) {
+                await refetchDates();
+            } else {
+                setSelectedRowKeys([]);
+            }
+        }
+    }
+
+    async function handleCellChange({
         date,
         userId,
         status,
-    }: CellChangeProps): Promise<void> => {
+    }: CellChangeProps): Promise<void> {
         if (projDates) {
             const updatedDate = getUpdatedDate({
                 project,
@@ -68,66 +127,17 @@ const ProjTable = ({ project }: ProjTableProps) => {
             }
             console.error('Cell update failed!');
         }
-    };
-
-    let columns: TableColumn[] | undefined = [];
-    if (allSparks)
-        columns = renderColumns(project.projTeam, allSparks, project.SK);
-
-    let rowData: RowData[] = [];
-
-    if (projDates) {
-        rowData = renderRows(projDates, columns, handleCellChange);
     }
 
-    const onRowSelectionChange = (newSelectedRowKeys: React.Key[]) => {
+    function onRowSelectionChange(newSelectedRowKeys: React.Key[]) {
         setSelectedRowKeys(newSelectedRowKeys);
-    };
-
-    const handleRemoveDates = async () => {
-        if (projDates?.length === selectedRowKeys.length) {
-            await messageApi.open({
-                type: 'error',
-                content: 'Project has to have at least one date!',
-            });
-            return;
-        }
-        if (projDates && selectedRowKeys.length > 0) {
-            let updatedDates: ProjDate[] = projDates.filter((date) =>
-                selectedRowKeys.includes(date.SK)
-            );
-
-            updatedDates = updatedDates.map((date) => {
-                return removeProjectFromDate(project.SK, date);
-            });
-
-            // console.log('dates to remove from project : ', updatedDates);
-
-            const newProjDates = project.projDates.filter(
-                (date) => !selectedRowKeys.includes(date)
-            );
-
-            // console.log('updated projDates : ', newProjDates);
-            let refetchFlag = false;
-            await removeDatesFromProject({
-                projId: project.SK,
-                projDates: newProjDates,
-                datesToUpdate: updatedDates,
-            })
-                .unwrap()
-                .catch(() => (refetchFlag = true));
-
-            if (refetchFlag) await refetchDates();
-            if (!refetchFlag) setSelectedRowKeys([]);
-        }
-    };
-
+    }
     const rowSelection = {
         selectedRowKeys,
         onChange: onRowSelectionChange,
     };
 
-    const handleDeleteProject = async () => {
+    async function handleDeleteProject() {
         if (projDates) {
             const updatedDates = projDates.map((date) =>
                 removeProjectFromDate(project.SK, date)
@@ -143,9 +153,7 @@ const ProjTable = ({ project }: ProjTableProps) => {
             }
             navigate('/calendar');
         }
-    };
-
-    // TODO refactor table footer
+    }
 
     return (
         <div>

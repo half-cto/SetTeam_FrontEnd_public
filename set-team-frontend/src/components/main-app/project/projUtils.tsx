@@ -39,6 +39,7 @@ export const renderColumns = (
     projectId: string
 ): TableColumn[] => {
     const renderedColumns: TableColumn[] = [
+        // add Date column
         {
             title: 'Date',
             dataIndex: 'date',
@@ -104,9 +105,11 @@ export function renderRows(
         if (columns) {
             columns.forEach((column) => {
                 if (column.dataIndex === 'date') return;
+
                 const sparkStatus = teamStatus.find(
                     (memberStatus) => memberStatus.userId === column.key
                 );
+                // add data passed to each cell
                 rowToAdd[column.dataIndex] = {
                     cellId: column.dataIndex,
                     callback: callback,
@@ -119,7 +122,7 @@ export function renderRows(
     return rowData;
 }
 
-// cell onClick handler function
+// getUpdatedDate - return data for cell update based on current cell state
 
 export const getUpdatedDate = ({
     project,
@@ -130,6 +133,7 @@ export const getUpdatedDate = ({
 }: CellChangeProps): DateCore | undefined => {
     if (status && status !== project.SK && status !== 'available') return;
 
+    // switch user status to opposite : ('available' || undefined) <==> project.SK
     const newStatus =
         status === 'available' || status === undefined
             ? project.SK
@@ -139,6 +143,7 @@ export const getUpdatedDate = ({
 
     let newTeamStatus: SparkStatus[] = [];
 
+    // find user in date.teamStatus and update status OR add new entry to date.teamStatus
     if (dateToUpdate?.teamStatus.find((el) => el.userId === userId)) {
         newTeamStatus = dateToUpdate.teamStatus.map((sparkStatus) => {
             if (sparkStatus.userId === userId)
@@ -159,6 +164,7 @@ export const getUpdatedDate = ({
         }
     }
 
+    // return updated date entry
     if (dateToUpdate?.sessionId) {
         return {
             SK: date,
@@ -168,7 +174,10 @@ export const getUpdatedDate = ({
     }
 };
 
+// prepare date for deleting in DB
+
 export const removeProjectFromDate = (projId: string, date: ProjDate) => {
+    // release team members from project
     const newTeamStatus = date.teamStatus.map((teamStatus) => {
         if (teamStatus.status === projId) {
             return { ...teamStatus, status: 'available' };
@@ -176,6 +185,7 @@ export const removeProjectFromDate = (projId: string, date: ProjDate) => {
         return teamStatus;
     });
 
+    // remove project from date
     const newDateProjs = date.dateProjs.filter((proj) => proj !== projId);
 
     return {

@@ -1,12 +1,12 @@
 import { ConfigProvider } from 'antd';
 import { MDisplayPage } from './MDashboard';
 import MNavSandwich from './MNavSandwich';
-import MonthSwitcher from './navbarComponents/MonthSwithcer';
+import MonthSwitcher from './navbar-components/MonthSwithcer';
 
-import NavTitle from './navbarComponents/NavTitle';
+import NavTitle from './navbar-components/NavTitle';
 
 import { AuthService } from '../../services/authService';
-import NavProjName from './navbarComponents/NavProjName';
+import NavProjName from './navbar-components/NavProjName';
 import { updateDisplayPage, useFetchUserQuery } from '../../store/store';
 import { useDispatch } from 'react-redux';
 

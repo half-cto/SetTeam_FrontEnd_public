@@ -2,7 +2,7 @@ import { getCredentialsFromLocalStorage } from '../../utils/functions';
 import MCalendar from './MCalendar';
 import MNavbar from './MNavbar';
 
-import MProjectPage from './mProjectPage/MProjectPage';
+import MProjectPage from './m-project-page/MProjectPage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import MCreateProject from './create-project-page/MCreateProject';

@@ -8,7 +8,7 @@ import Login from './components/login/Login.tsx';
 import NavBar from './components/main-app/navbar/Navbar.tsx';
 import { AuthService } from './services/authService.ts';
 import ConfimNewUser from './components/login/ConfirmNewUser.tsx';
-import UserInfo from './components/main-app/userInfo/UserInfo.tsx';
+import UserInfo from './components/main-app/user-info/UserInfo.tsx';
 import Dashboard from './components/main-app/calendar/Dashboard.tsx';
 import Project from './components/main-app/project/Project.tsx';
 import ErrorPage from './components/main-app/error-page/ErrorPage.tsx';
@@ -19,7 +19,6 @@ import MDashboard from './components/mobile-app/MDashboard.tsx';
 
 const authService = new AuthService();
 
-// TODO clen up authService drilling
 const router = createBrowserRouter([
     {
         path: '/',

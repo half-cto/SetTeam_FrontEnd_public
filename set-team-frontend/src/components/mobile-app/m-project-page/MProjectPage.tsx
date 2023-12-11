@@ -7,7 +7,7 @@ import { updateDisplayPage, useFetchProjByIdQuery } from '../../../store/store';
 import MProjectDate from './MProjectDate';
 import { FloatButton, Spin } from 'antd';
 import { useDispatch } from 'react-redux';
-import ProjDateSwitcher from '../navbarComponents/ProjDateSwitcher';
+import ProjDateSwitcher from '../navbar-components/ProjDateSwitcher';
 
 interface MProjectPageProps {
     activeProjectId: string;
